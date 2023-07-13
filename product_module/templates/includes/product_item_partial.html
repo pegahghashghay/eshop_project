@@ -1,13 +1,13 @@
 {% load thumbnail %}
+
 <div class="col-sm-4">
     <div class="product-image-wrapper">
         <div class="single-products">
             <div class="productinfo text-center">
                 {% if product.image %}
-{#                    <img src="{{ product.image.url }}" alt="">#}
-                {% thumbnail product.image "268x250" quality=95 crop='center' as im %}
-                      <img src="{{ im.url }}">
-                {% endthumbnail %}
+                    {% thumbnail product.image "268x250" quality=90 crop='center' as im %}
+                        <img src="{{ im.url }}">
+                    {% endthumbnail %}
                 {% else %}
                     <img src="/static/images/shop/product.jpg" alt="">
                 {% endif %}
@@ -27,9 +27,15 @@
         </div>
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
-                <li><a href="{% url 'product-detail' product.slug %}"><i class="fa fa-plus-square"></i>مشاهده
-                    جزییات</a></li>
-                <li><a href=""><i class="fa fa-plus-square"></i>مقایسه</a></li>
+                <li>
+                    <a href="{{ product.get_absolute_url }}">
+                        <i class="fa fa-plus-square"></i>
+                        مشاهده جزییات
+                    </a>
+                </li>
+                <li>
+                    <a href=""><i class="fa fa-plus-square"></i>مقایسه</a>
+                </li>
             </ul>
         </div>
     </div>

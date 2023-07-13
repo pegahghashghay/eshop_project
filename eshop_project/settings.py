@@ -47,12 +47,15 @@ INSTALLED_APPS = [
     'polls',
     'home',
     'todo',
+    'user_panel_module',
+    'order_module',
     # external apps
     'django_render_partial',
     'sorl.thumbnail',
     'jalali_date',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'pymongo',
 
 ]
 
@@ -100,6 +103,15 @@ DATABASES = {
          'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.Mongo.backends',
+#         'NAME': 'demodatabase',
+#     }
+# }
+
+
 
 
 # Password validation

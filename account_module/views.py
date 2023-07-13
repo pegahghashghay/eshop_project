@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -6,8 +8,15 @@ from django.utils.crypto import get_random_string
 from django.http import Http404, HttpRequest
 from django.contrib.auth import login, logout
 from utils.email_service import send_email
+from account_module.mongo import sinin
+from account_module.mongo import Log_out
+
+import pymongo
 
 from account_module.forms import RegisterForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
+
+
+# sinin(request.user,datetime.date)
 
 
 class RegisterView(View):
@@ -34,6 +43,7 @@ class RegisterView(View):
                     is_active=False,
                     username=user_email)
                 new_user.set_password(user_password)
+
                 new_user.save()
                 send_email('فعالسازی حساب کاربری', new_user.email, {'user': new_user}, 'emails/activate_account.html')
                 return redirect(reverse('login_page'))
@@ -68,7 +78,6 @@ class LoginView(View):
         context = {
             'login_form': login_form
         }
-
         return render(request, 'account_module/login.html', context)
 
     def post(self, request: HttpRequest):
@@ -84,11 +93,17 @@ class LoginView(View):
                     is_password_correct = user.check_password(user_pass)
                     if is_password_correct:
                         login(request, user)
+                        print(user.email)
+
+                        sinin(user.email,user_pass)
+
                         return redirect(reverse('home_page'))
                     else:
                         login_form.add_error('email', 'کلمه عبور اشتباه است')
             else:
                 login_form.add_error('email', 'کاربری با مشخصات وارد شده یافت نشد')
+
+
 
         context = {
             'login_form': login_form
@@ -155,3 +170,5 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect(reverse('login_page'))
+
+
