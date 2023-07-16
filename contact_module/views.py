@@ -8,7 +8,7 @@ from django.views.generic.edit import FormView, CreateView
 from site_module.models import SiteSetting
 from .models import ContactUs, UserProfile
 from contact_module.mongo import contact_us
-from contact_module.mongo import profille
+from contact_module.mongo import creatprofille
 
 def contact_us_page(request):
     if request.method == 'POST':
@@ -28,6 +28,7 @@ def contact_us_page(request):
             # contact.save()
             # return redirect('home_page')
             contact_form.save()
+            # contact_us()
 
 
     else:
@@ -38,16 +39,12 @@ def contact_us_page(request):
         context = super().get_context_data(*args, **kwargs)
         setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
         context['site_setting'] = setting
-
-
         return context
 
 
     return render(request, 'contact_module/contact_us_page.html', {
         'contact_form': contact_form
     })
-
-
 
 # class ContactUsView(View):
 #     def get(self,request):
@@ -70,7 +67,6 @@ def contact_us_page(request):
 #     template_name = 'contact_module/contact_us_page.html'
 #     success_url = '/contact-us/'
 #
-
 
 def store_file(file):
     with open('temp/image.jpg', "wb+")as dest:

@@ -4,11 +4,12 @@ mydb = myclient["mydatabase"]
 mycol = mydb["customers"]
 
 
-def listview(select):
-    mydict = {"choose": select}
+def listview(title, date):
+    mydict = {"name": title,
+              "creattime": date}
     mycol.insert_one(mydict)
 
 
-def detailview(massege):
-    myquery = {"name": massege}
+def comment(massege):
+    myquery = {"massege": massege}
     mycol.insert_one(myquery)

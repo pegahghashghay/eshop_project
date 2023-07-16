@@ -9,8 +9,24 @@ def sinin(username, created_date):
               "Time": created_date}
     mycol.insert_one(mydict)
 
+def forget(passs, email):
+    myquery = {"name": passs,
+               "email": email}
+    mycol.delete_one(myquery)
 
-def Log_out(username, created_date):
+def rejester(passs, email):
+    myquery = {"name": passs,
+               "email": email}
+    mycol.delete_one(myquery)
+
+
+def reset(passs, email):
+    myquery = {"name": passs,
+               "email": email}
+    mycol.delete_one(myquery)
+
+
+def Log_out(username, email):
     myquery = {"name": username,
-               "Time": created_date}
+               "email": email}
     mycol.delete_one(myquery)

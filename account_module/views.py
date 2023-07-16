@@ -9,7 +9,13 @@ from django.http import Http404, HttpRequest
 from django.contrib.auth import login, logout
 from utils.email_service import send_email
 from account_module.mongo import sinin
-from account_module.mongo import Log_out
+from account_module.mongo import rejester
+from account_module.mongo import forget
+from account_module.mongo import reset
+
+
+
+
 
 import pymongo
 
@@ -45,6 +51,7 @@ class RegisterView(View):
                 new_user.set_password(user_password)
 
                 new_user.save()
+                # rejester(bool.email,bool.passs)
                 send_email('فعالسازی حساب کاربری', new_user.email, {'user': new_user}, 'emails/activate_account.html')
                 return redirect(reverse('login_page'))
 
@@ -125,6 +132,7 @@ class ForgetPasswordView(View):
             user: User = User.objects.filter(email__iexact=user_email).first()
             if user is not None:
                 send_email('بازیابی کلمه عبور', user.email, {'user': user}, 'emails/forgot_password.html')
+                forget(user.email)
                 return redirect(reverse('home_page'))
 
         context = {'forget_pass_form': forget_pass_form}
@@ -138,7 +146,7 @@ class ResetPasswordView(View):
             return redirect(reverse('login_page'))
 
         reset_pass_form = ResetPasswordForm()
-
+        reset(user.email)
         context = {
             'reset_pass_form': reset_pass_form,
             'user': user

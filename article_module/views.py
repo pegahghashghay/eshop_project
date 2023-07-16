@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from article_module.models import Article, ArticleCategory, ArticleComment
+from article_module.mongo import comment
+from article_module.mongo import listview
+
 
 
 
@@ -13,6 +16,7 @@ class ArticlesListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ArticlesListView, self).get_context_data(*args, **kwargs)
+        # listview(Article.title, 2)
         return context
 
     def get_queryset(self):
@@ -43,10 +47,10 @@ class ArticleDetailView(DetailView):
 
 def article_categories_component(request: HttpRequest):
     article_main_categories = ArticleCategory.objects.prefetch_related('articlecategory_set').filter(is_active=True, parent_id=None)
-
     context = {
         'main_categories': article_main_categories
     }
+    # comment(massege=str)
     return render(request, 'article_module/components/article_categories_component.html', context)
 
 

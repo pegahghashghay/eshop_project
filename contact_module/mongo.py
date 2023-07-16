@@ -4,23 +4,16 @@ mydb = myclient["mydatabase"]
 mycol = mydb["customers"]
 
 
-def contact_us(name, email, masseg, title):
-    mydict = {"name": name,
-              "email": email,
-              "message": masseg,
-              "title": title}
+def contact_us(email, masseg):
+    mydict = {"email": email,
+              "message": masseg}
     x = mycol.insert_one(mydict)
-    # newvalues = {"$set":
-    #                  "name": name,
-    #                  "email": email,
-    #                  "message": masseg,
-    #                  "title": title}
-    # mycol.update_one(mydict, newvalues)
-    # for x in mycol.find():
-    #     print(x)
 
 
-def profille(full_name, massseg):
+def creatprofille(full_name, email):
     mydict = {"name": full_name,
-              "email": massseg}
+              "email": email}
     x = mycol.insert_one(mydict)
+
+
+

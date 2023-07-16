@@ -6,9 +6,14 @@ from django.views.generic import TemplateView
 from account_module.models import User
 from .forms import EditProfileModelForm, ChangePasswordForm
 from django.contrib.auth import logout
+from user_panel_module.mongo import user_panel_dashbord
+from user_panel_module.mongo import change_password
+from user_panel_module.mongo import edit_user_panel
+
 
 class UserPanelDashboardPage(TemplateView):
     template_name = 'user_panel_module/user_panel_dashboard_page.html'
+    # user_panel_dashbord(User.email,User.last_name,User.username,User.address)
 
 
 class EditUserProfilePage(View):
@@ -26,11 +31,11 @@ class EditUserProfilePage(View):
         edit_form = EditProfileModelForm(request.POST, request.FILES, instance=current_user)
         if edit_form.is_valid():
             edit_form.save(commit=True)
-
         context = {
             'form': edit_form,
             'current_user': current_user
         }
+        edit_user_panel(current_user.about_user,current_user.address)
         return render(request, 'user_panel_module/edit_profile_page.html', context)
 
 class ChangePasswordPage(View):
@@ -47,6 +52,7 @@ class ChangePasswordPage(View):
             if current_user.check_password(form.cleaned_data.get('current_password')):
                 current_user.set_password(form.cleaned_data.get('password'))
                 current_user.save()
+                change_password(current_user.password)
                 logout(request)
                 return redirect(reverse('login_page'))
             else:

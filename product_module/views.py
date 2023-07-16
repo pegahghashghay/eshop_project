@@ -35,10 +35,13 @@ from django.http import HttpRequest
 from django.views.generic.base import TemplateView, View
 from django.views.generic import ListView, DetailView
 from .models import Product, ProductCategory, ProductBrand, ProductVisit
-from product_module.mongo import Product_Favorite
 from django.db.models import Count
 from site_module.models import SiteBanner
 from utils.http_service import get_client_ip
+from product_module.mongo import product_favorite
+from product_module.mongo import product_detail
+from product_module.mongo import product_list
+
 
 
 
@@ -64,6 +67,7 @@ class ProductListView(ListView):
         context['start_price'] = self.request.GET.get('start_price') or 0
         context['end_price'] = self.request.GET.get('end_price') or db_max_price
         context['banners'] = SiteBanner.objects.filter(is_active=True, position__iexact=SiteBanner.SiteBannerPositions.product_list)
+        product_list(product.title, product.price)
         return context
 
     def get_queryset(self):
@@ -73,6 +77,9 @@ class ProductListView(ListView):
         request: HttpRequest = self.request
         start_price = request.GET.get('start_price')
         end_price = request.GET.get('end_price')
+        # product_list(Product.title,Product.price)
+
+
         if start_price is not None:
             query = query.filter(price__gte=start_price)   #اگر مقدار قیمت بزرگتر یا مساوی مقداری که مشخص کردیم بود
 
@@ -108,6 +115,7 @@ class ProductDetailView(DetailView):
         if not has_been_visited:
             new_visit = ProductVisit(ip=user_ip, user_id=user_id, product_id=loaded_product.id)
             new_visit.save()
+        product_detail(loaded_product.title,loaded_product.price)
         return context
 
 
@@ -116,10 +124,8 @@ class AddProductFavorite(View):
         product_id = request.POST["product_id"]
         product = Product.objects.get(pk=product_id)
         request.session["product_favorites"] = product_id
-        Product_Favorite(request.user, datetime.date)
+        product_favorite(product.title)
         return redirect(product.get_absolute_url())
-
-
 
 
 def product_categories_component(request: HttpRequest):

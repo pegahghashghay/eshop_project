@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from todo.mongo import generac
 User = get_user_model()
 # Create your views here.
 
@@ -140,12 +141,21 @@ class TodosGenericApiView(generics.ListCreateAPIView):
     queryset = Todo.objects.order_by('priority').all()
     serializer_class = TodoSerializer
     pagination_class = TodosGenericApiViewPagination
+
     # authentication_classes = [BasicAuthentication]
     # permission_classes = [IsAuthenticated]
 
-class TodosGenericDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Todo.objects.order_by('priority').all()
+class TodosGenericDetailView(generics.RetrieveAPIView):
+    queryset = Todo.objects.all()
     serializer_class = TodoSerializer
+
+
+    def retrieve(self, request, *args, **kwargs):
+        qs=self.get_object()
+        serializer=self.get_serializer(qs)
+        print(serializer.data)
+        # return Response(serializer.data)
+    # generac(queryset.content, queryset.title)
 
 #endregion
 
@@ -156,6 +166,7 @@ class TodosViewSetApiView(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
     pagination_class = LimitOffsetPagination
 
+
 #endregion
 
 #region users
@@ -163,5 +174,6 @@ class TodosViewSetApiView(viewsets.ModelViewSet):
 class UsersGenericApiView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerialzier
+
 
 #endregion

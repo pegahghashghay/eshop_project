@@ -4,7 +4,21 @@ mydb = myclient["mydatabase"]
 mycol = mydb["customers"]
 
 
-def Product_Favorite(product, created_date):
-    mydict = {"name": product,
-              "Time": created_date}
-    x = mycol.insert_one(mydict)
+
+def product_list(title,price):
+    mydict = {"name": title,
+              "price": price}
+    mycol.insert_one(mydict)
+
+
+
+def product_detail(title,price):
+    mydict = {"name": title,
+              "price": price}
+    mycol.insert_one(mydict)
+
+
+
+def product_favorite(title):
+    mydict = {"name": title}
+    mycol.insert_one(mydict)
