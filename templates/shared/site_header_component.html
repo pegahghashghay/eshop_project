@@ -50,6 +50,8 @@
                                 {% if request.user.is_superuser %}
                                     <li><a href="/admin"><i class="fa fa-user"></i> پنل ادمین</a></li>
                                 {% endif %}
+{#                                <li><a href="{% url 'product-favorite' %}"><i class=""></i> کالای محبوب</a>#}
+{#                                </li>#}
                                 <li><a href="login.html"><i class="fa fa-shopping-cart"></i> سبد خرید</a></li>
                                 <li><a href="{% url 'user_panel_dashboard' %}"><i class="fa fa-user"></i> پنل کاربری</a>
                                 </li>

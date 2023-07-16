@@ -61,13 +61,13 @@ class ProductListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductListView, self).get_context_data()
         query = Product.objects.all()  # کل محصولات میخواد
-        product: Product = query.order_by('-price').first()
+        product: Product = query.order_by('price').first()
         db_max_price = product.price if product is not None else 0
         context['db_max_price'] = db_max_price
         context['start_price'] = self.request.GET.get('start_price') or 0
         context['end_price'] = self.request.GET.get('end_price') or db_max_price
         context['banners'] = SiteBanner.objects.filter(is_active=True, position__iexact=SiteBanner.SiteBannerPositions.product_list)
-        product_list(product.title, product.price)
+        product_list(product.title,product.price)
         return context
 
     def get_queryset(self):
